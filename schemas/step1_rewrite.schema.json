@@ -1,0 +1,169 @@
+{
+  "type": "object",
+  "properties": {
+    "storyline": {
+      "type": "string",
+      "description": "简述仿写后的完整故事主线，包括起承转合。"
+    },
+    "storyline_rationale": {
+      "type": "string",
+      "description": "解释故事线设计、原视频继承关系和资产拆分逻辑。"
+    },
+    "overall_style": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "整体视频画面风格，30字以内。"
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "character_design": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "voice_tone": {
+            "type": "string"
+          },
+          "art_style": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "voice_tone",
+          "art_style"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "prop_design": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "art_style": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "art_style"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "scene_design": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "art_style": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "art_style"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "script_breakdown": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "segment_id": {
+            "type": "integer"
+          },
+          "time_range": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "design_intent": {
+            "type": "string"
+          },
+          "scenes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "characters": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "props": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "visual_dialogue": {
+            "type": "string"
+          },
+          "style_and_texture": {
+            "type": "string"
+          },
+          "cinematography_and_editing": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment_id",
+          "time_range",
+          "duration",
+          "design_intent",
+          "scenes",
+          "characters",
+          "props",
+          "visual_dialogue",
+          "style_and_texture",
+          "cinematography_and_editing"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "storyline",
+    "storyline_rationale",
+    "overall_style",
+    "character_design",
+    "prop_design",
+    "scene_design",
+    "script_breakdown"
+  ],
+  "additionalProperties": false
+}

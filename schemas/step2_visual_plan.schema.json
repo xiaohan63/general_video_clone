@@ -1,0 +1,103 @@
+{
+  "type": "object",
+  "properties": {
+    "asset_image_prompts": {
+      "type": "object",
+      "properties": {
+        "character_images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "generation_prompt": { "type": "string" }
+            },
+            "required": ["name", "generation_prompt"],
+            "additionalProperties": false
+          }
+        },
+        "prop_images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "generation_prompt": { "type": "string" }
+            },
+            "required": ["name", "generation_prompt"],
+            "additionalProperties": false
+          }
+        },
+        "scene_images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "generation_prompt": { "type": "string" }
+            },
+            "required": ["name", "generation_prompt"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["character_images", "prop_images", "scene_images"],
+      "additionalProperties": false
+    },
+    "reference_image_plan": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "segment_id": { "type": "integer" },
+          "reference_image_count": { "type": "integer" },
+          "reference_images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reference_image_id": { "type": "string" },
+                "source_assets": {
+                  "type": "object",
+                  "properties": {
+                    "characters": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "scenes": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "props": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  },
+                  "required": ["characters", "scenes", "props"],
+                  "additionalProperties": false
+                },
+                "generation_prompt": { "type": "string" },
+                "reused_reference_image_id": { "type": "string" },
+                "reuse_reason": { "type": "string" }
+              },
+              "required": ["reference_image_id"],
+              "additionalProperties": false,
+              "anyOf": [
+                {
+                  "required": ["source_assets", "generation_prompt"]
+                },
+                {
+                  "required": ["reused_reference_image_id", "reuse_reason"]
+                }
+              ]
+            }
+          }
+        },
+        "required": ["segment_id", "reference_image_count", "reference_images"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["asset_image_prompts", "reference_image_plan"],
+  "additionalProperties": false
+}

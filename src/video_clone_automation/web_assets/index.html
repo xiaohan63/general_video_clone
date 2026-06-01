@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Video Clone Pipeline</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>Video Clone Pipeline</h1>
+        <p id="subtitle">配置、运行和检查每一步输出</p>
+      </div>
+      <div class="run-controls">
+        <select id="stepSelect" aria-label="选择运行步骤">
+          <option value="all">全流程</option>
+          <option value="step1">Step 1</option>
+          <option value="step2">Step 2</option>
+          <option value="step3">Step 3</option>
+          <option value="step4">Step 4</option>
+          <option value="step5">Step 5</option>
+        </select>
+        <button id="saveBtn" type="button">保存配置</button>
+        <button id="runBtn" type="button" class="primary">开始生成</button>
+      </div>
+    </header>
+
+    <main>
+      <nav class="tabs" aria-label="页面视图">
+        <button type="button" class="active" data-tab="setup">生成前</button>
+        <button type="button" data-tab="results">生成后</button>
+        <button type="button" data-tab="logs">运行日志</button>
+      </nav>
+
+      <section id="setup" class="tab-panel active">
+        <div class="grid two">
+          <section class="panel">
+            <div class="panel-title">
+              <h2>项目输入</h2>
+              <select id="configSelect" aria-label="选择配置"></select>
+            </div>
+            <label>
+              视频名称
+              <input id="videoName" type="text" autocomplete="off" />
+            </label>
+            <label>
+              画面比例
+              <input id="aspectRatio" type="text" placeholder="9:16 / 16:9 / 1:1" />
+            </label>
+            <label>
+              要求 query
+              <textarea id="userQuery" rows="5"></textarea>
+            </label>
+            <label class="file-row">
+              上传原视频
+              <input id="videoFile" type="file" accept="video/*" />
+            </label>
+            <div class="status-line" id="inputVideoPath"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-title">
+              <h2>模型</h2>
+              <span>按 provider 覆盖</span>
+            </div>
+            <div id="modelList" class="model-list"></div>
+          </section>
+        </div>
+
+        <section class="panel wide">
+          <div class="panel-title">
+            <h2>Prompt</h2>
+            <span>保存时会写入本视频专属 prompt 文件</span>
+          </div>
+          <div id="promptTabs" class="prompt-tabs"></div>
+          <textarea id="promptEditor" class="prompt-editor" spellcheck="false"></textarea>
+        </section>
+      </section>
+
+      <section id="results" class="tab-panel">
+        <div class="results-header">
+          <button id="refreshResultsBtn" type="button">刷新结果</button>
+          <span id="resultsSummary"></span>
+        </div>
+        <div class="grid two">
+          <section class="panel">
+            <h2>仿写剧本</h2>
+            <div id="scriptView" class="json-preview"></div>
+          </section>
+          <section class="panel">
+            <h2>分幕视频</h2>
+            <div id="segmentVideos" class="media-grid"></div>
+          </section>
+        </div>
+        <section class="panel wide">
+          <h2>素材图</h2>
+          <div id="assetImages" class="media-grid"></div>
+        </section>
+        <section class="panel wide">
+          <h2>参考图</h2>
+          <div id="referenceImages" class="media-grid"></div>
+        </section>
+        <section class="panel wide">
+          <h2>成片视频</h2>
+          <div id="finalVideo" class="final-video"></div>
+        </section>
+      </section>
+
+      <section id="logs" class="tab-panel">
+        <section class="panel wide">
+          <div class="panel-title">
+            <h2>运行日志</h2>
+            <span id="jobStatus">未运行</span>
+          </div>
+          <pre id="logOutput" class="log-output"></pre>
+        </section>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" hidden></div>
+    <script src="/app.js"></script>
+  </body>
+</html>

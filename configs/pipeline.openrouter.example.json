@@ -1,0 +1,143 @@
+{
+  "project": {
+    "name": "video-clone-yunwu-gemini-step1"
+  },
+  "paths": {
+    "workspace_root": ".."
+  },
+  "video": {
+    "name": "dahuaxiyou-ending",
+    "aspect_ratio": "9:16"
+  },
+  "providers": {
+    "script_rewrite": {
+      "type": "yunwu_gemini_generate_content",
+      "options": {
+        "base_url": "https://yunwu.ai/v1beta",
+        "api_key_env": "YUNWU_API_KEY",
+        "model": "gemini-3.1-pro-preview",
+        "response_mime_type": "application/json",
+        "timeout_seconds": 1800
+      }
+    },
+    "visual_planner": {
+      "type": "openai_compatible_chat",
+      "options": {
+        "base_url": "https://yunwu.ai/v1",
+        "api_key_env": "YUNWU_API_KEY",
+        "model": "gpt-5.5",
+        "reasoning_enabled": false,
+        "timeout_seconds": 1800
+      }
+    },
+    "asset_image": {
+      "type": "openai_compatible_image",
+      "options": {
+        "base_url": "https://yunwu.ai/v1",
+        "api_key_env": "YUNWU_API_KEY",
+        "model": "gpt-image-2",
+        "timeout_seconds": 1800,
+        "output_format": "png"
+      }
+    },
+    "reference_image": {
+      "type": "openai_compatible_image",
+      "options": {
+        "base_url": "https://yunwu.ai/v1",
+        "api_key_env": "YUNWU_API_KEY",
+        "model": "gpt-image-2",
+        "timeout_seconds": 1800,
+        "output_format": "png"
+      }
+    },
+    "video_segment": {
+      "type": "openai_compatible_video",
+      "options": {
+        "base_url": "https://yunwu.ai",
+        "api_key_env": "YUNWU_API_KEY",
+        "model": "kling-v3-omni",
+        "timeout_seconds": 600,
+        "poll_interval_seconds": 10,
+        "max_wait_seconds": 1800,
+        "max_create_retries": 3,
+        "retry_delay_seconds": 60,
+        "endpoint_path": "/kling/v1/videos/omni-video",
+        "image_input_mode": "base64",
+        "payload_format": "kling_omni",
+        "image_field": "image_urls",
+        "max_reference_images": 1,
+        "poll_style": "path"
+      }
+    }
+  },
+  "steps": {
+    "step1": {
+      "enabled": true,
+      "mode": "single_pass",
+      "input_video": "data/input/dahuaxiyou.mp4",
+      "rewrite_prompt_path": "prompts/step1_rewrite.txt",
+      "output_schema_path": "schemas/step1_rewrite.schema.json",
+      "script_output_path": "data/intermediate/{video_name}/step1_rewritten_script.json",
+      "skip_if_exists": false,
+      "user_query": "和原视频人物风格保持一致，仅修改大结局",
+      "extra_context": {
+        "language": "简体中文",
+        "output_goal": "下游生图和生视频使用的结构化 JSON 剧本"
+      }
+    },
+    "step2": {
+      "enabled": true,
+      "input_script_path": "data/intermediate/{video_name}/step1_rewritten_script.json",
+      "planning_prompt_path": "prompts/step2_plan.txt",
+      "output_schema_path": "schemas/step2_visual_plan.schema.json",
+      "plan_output_path": "data/intermediate/{video_name}/step2_visual_plan.json",
+      "skip_if_exists": false
+    },
+    "step3": {
+      "enabled": true,
+      "input_plan_path": "data/intermediate/{video_name}/step2_visual_plan.json",
+      "asset_prompt_path": "prompts/step3_asset_images.txt",
+      "reference_prompt_path": "prompts/step3_reference_frames.txt",
+      "generation_output_path": "data/intermediate/{video_name}/step3_generated_assets.json",
+      "asset_output_dir": "data/output/{video_name}/step3/assets",
+      "reference_output_dir": "data/output/{video_name}/step3/reference_images",
+      "skip_if_exists": false,
+      "image_options": {
+        "character_images": {
+          "size": "1024x1536"
+        },
+        "prop_images": {
+          "size": "1024x1024"
+        },
+        "scene_images": {},
+        "reference_images": {}
+      }
+    },
+    "step4": {
+      "enabled": true,
+      "input_script_path": "data/intermediate/{video_name}/step1_rewritten_script.json",
+      "input_generation_path": "data/intermediate/{video_name}/step3_generated_assets.json",
+      "video_prompt_path": "prompts/step4_video_segments.txt",
+      "segment_output_path": "data/output/{video_name}/step4_video_segments.json",
+      "final_video_manifest_path": "data/output/{video_name}/final_video_manifest.json",
+      "video_output_dir": "data/output/{video_name}/step4/video_segments",
+      "assembled_video_path": "data/output/{video_name}/final_video.mp4",
+      "skip_if_exists": false,
+      "video_options": {
+        "sound": "on"
+      }
+    },
+    "step5": {
+      "enabled": true,
+      "input_manifest_path": "data/output/{video_name}/final_video_manifest.json",
+      "final_video_path": "data/output/{video_name}/final_video.mp4",
+      "final_video_manifest_path": "data/output/{video_name}/final_video_manifest.json",
+      "skip_if_exists": false,
+      "concat_options": {
+        "ffmpeg_binary": "ffmpeg",
+        "reencode_on_copy_failure": true,
+        "allow_planned_segments": false
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.DS_Store
+
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+build/
+dist/
+
+# Generated media and pipeline outputs
+data/input/*
+!data/input/.gitkeep
+data/intermediate/*
+!data/intermediate/.gitkeep
+data/output/*
+!data/output/.gitkeep
+
+# Common large media artifacts
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
